@@ -1,0 +1,230 @@
+{
+    "class": "AS3",
+    "$schema": "https://raw.githubusercontent.com/F5Networks/f5-appsvcs-extension/master/schema/latest/as3-schema.json",
+    "declaration": {
+        "class": "ADC",
+        "target": {
+            "hostname": "{{bigip}}"
+        },
+        "schemaVersion": "3.12.0",
+        "id": "testing",
+        "Siebel_Webapplets": {
+            "class": "Tenant",
+            "http": {
+                "class": "Application",
+                "schemaOverlay": "AS3-Siebel-http",
+                "template": "http",
+                "serviceMain": {
+                    "class": "Service_HTTP",
+                    "virtualAddresses": [
+                        "90.4.4.213"
+                    ],
+                    "iRules": [
+                        "Irule_Siebel_WebApplets"
+                    ],
+                    "profileHTTP": {
+                        "use": "HTTP_Profile"
+                    },
+                    "profileTCP": {
+                        "use": "TCP_Profile"
+                    }
+                },
+                "TLS_Client": {
+                    "class": "TLS_Client",
+                    "clientCertificate": "Certificate_Serverside"
+                },
+                "Certificate_Serverside": {
+                    "class": "Certificate",
+                    "certificate": {
+                        "bigip": "/Common/SSL_WebApplet_lab_ALL.crt"
+                    },
+                    "privateKey": {
+                        "bigip": "/Common/SSL_WebApplet_lab_ALL.key"
+                    }
+                },
+                "Pool": {
+                    "class": "Pool",
+                    "loadBalancingMode": "least-connections-member",
+                    "members": [
+                        {
+                            "serverAddresses": [
+                                "90.4.4.183"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.184"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.185"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.186"
+                            ],
+                            "servicePort": 8006
+                        }
+                    ],
+                    "minimumMonitors": 1,
+                    "monitors": [
+                        {
+                            "use": "Monitor_Webapplets_https"
+                        },
+                        {
+                            "use": "Monitor_https"
+                        }
+                    ]
+                },
+                "Irule_Siebel_WebApplets": {
+                    "class": "iRule",
+                    "iRule": "# F5 iRule Siebel_WebApplets\r\n# Make by Jaime Quiroga \r\n# Date 26-02-2016\r\n# Version 1.0\r\n\r\nwhen CLIENT_ACCEPTED {\r\n    # Check the VS port to determine if connection is SSL or not\r\n    switch [TCP::local_port] {\r\n        \"443\" {\r\n            set Proto \"https://\"\r\n        }\r\n        default {\r\n            set Proto \"http://\"\r\n        }\r\n    }\r\n}\r\n\r\nwhen HTTP_RESPONSE {\r\n    if { ! [HTTP::header exists \"X-Content-Type-Options\"] } {\r\n        HTTP::header insert \"X-Content-Type-Options\" \"nosniff\"\r\n    } elseif { [HTTP::header exists \"X-Content-Type-Options\"] } {\r\n        HTTP::header replace \"X-Content-Type-Options\" \"nosniff\"\r\n    }\r\n\r\n    if { ! [HTTP::header exists \"Access-Control-Allow-Origin\"] } {\r\n        HTTP::header insert \"Access-Control-Allow-Origin\" \"https://webappletslab.davivienda.loc\"\r\n    } elseif { [HTTP::header exists \"Access-Control-Allow-Origin\"] } {\r\n        HTTP::header replace \"Access-Control-Allow-Origin\" \"https://webappletslab.davivienda.loc\"\r\n    }\r\n\r\n    if { ! [HTTP::header exists \"X-XSS-Protection\"] } {\r\n        HTTP::header insert \"X-XSS-Protection\" \"1; mode=block\"\r\n        #log local0. \"Cabecera [HTTP::header X-XSS-Protection]\"\r\n    } elseif {  [HTTP::header exists \"X-XSS-Protection\"] } {\r\n        HTTP::header replace \"X-XSS-Protection\" \"1; mode=block\"\r\n        #log local0. \"Cabecera [HTTP::header X-XSS-Protection]\"\r\n    }\r\n\r\n    if { [HTTP::is_redirect] } {\r\n        if { [HTTP::header Location] starts_with \"http:\" && [HTTP::header Location] contains \"90.4.5.86\" } {\r\n            set nuevo [string map -nocase \"http: https:\" [HTTP::header Location]]\r\n            HTTP::header replace Location $nuevo\r\n        }\r\n    }\r\n}"
+                },
+                "Monitor_Webapplets_https": {
+                    "class": "Monitor",
+                    "monitorType": "https",
+                    "send": "GET /WebMonitoreo/monitoreo.jsp HTTP/1.1\\r\\nHost: \\r\\nConnection: Close\\r\\n\\r\\n",
+                    "receive": "Estoy Vivo!!!"
+                },
+                "Monitor_https": {
+                    "class": "Monitor",
+                    "monitorType": "https"
+                },
+                "TCP_Profile": {
+                    "class": "TCP_Profile"
+                },
+                "HTTP_Profile": {
+                    "class": "HTTP_Profile"
+                }
+            },
+            "https": {
+                "class": "Application",
+                "schemaOverlay": "AS3-Siebel-https",
+                "template": "https",
+                "serviceMain": {
+                    "class": "Service_HTTPS",
+                    "virtualAddresses": [
+                        "90.4.4.213"
+                    ],
+                    "iRules": [
+                        "Irule_Siebel_WebApplets"
+                    ],
+                    "profileAnalytics": {
+                        "use": "Analytics_Profile"
+                    },
+                    "profileHTTP": {
+                        "use": "HTTP_Profile"
+                    },
+                    "profileTCP": {
+                        "use": "TCP_Profile"
+                    }
+                },
+                "TLS_Client": {
+                    "class": "TLS_Client",
+                    "clientCertificate": "Certificate_Serverside"
+                },
+                "TLS_Server": {
+                    "class": "TLS_Server",
+                    "certificates": [
+                        {
+                            "certificate": "Certificate"
+                        }
+                    ],
+                    "ciphers": "RSA+AES:ECDHE+3DES:RSA+3DES:!MD5:!SSLv3:!RC4:!ECDHE-RSA-AES128-CBC-SHA+TLSv1_1:!ECDHE-RSA-AES128-CBC-SHA+TLSv1_2:@STRENGTH"
+                },
+                "Certificate": {
+                    "class": "Certificate",
+                    "certificate": {
+                        "bigip": "/Common/webappletslab.davivienda.loc_V4.crt"
+                    },
+                    "privateKey": {
+                        "bigip": "/Common/webappletslab.davivienda.loc_V4.key"
+                    },
+                    "chainCA": {
+                        "bigip": "/Common/CA_Davivienda_Intermedios.crt"
+                    }
+                },
+                "Certificate_Serverside": {
+                    "class": "Certificate",
+                    "certificate": {
+                        "bigip": "/Common/SSL_WebApplet_lab_ALL.crt"
+                    },
+                    "privateKey": {
+                        "bigip": "/Common/SSL_WebApplet_lab_ALL.key"
+                    }
+                },
+                "Pool": {
+                    "class": "Pool",
+                    "loadBalancingMode": "least-connections-member",
+                    "members": [
+                        {
+                            "serverAddresses": [
+                                "90.4.4.183"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.184"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.185"
+                            ],
+                            "servicePort": 8006
+                        },
+                        {
+                            "serverAddresses": [
+                                "90.4.4.186"
+                            ],
+                            "servicePort": 8006
+                        }
+                    ],
+                    "minimumMonitors": 1,
+                    "monitors": [
+                        {
+                            "use": "Monitor_Webapplets_https"
+                        },
+                        {
+                            "use": "Monitor_https"
+                        }
+                    ]
+                },
+                "Irule_Siebel_WebApplets": {
+                    "class": "iRule",
+                    "iRule": "# F5 iRule Siebel_WebApplets\r\n# Make by Jaime Quiroga \r\n# Date 26-02-2016\r\n# Version 1.0\r\n\r\nwhen CLIENT_ACCEPTED {\r\n    # Check the VS port to determine if connection is SSL or not\r\n    switch [TCP::local_port] {\r\n        \"443\" {\r\n            set Proto \"https://\"\r\n        }\r\n        default {\r\n            set Proto \"http://\"\r\n        }\r\n    }\r\n}\r\n\r\nwhen HTTP_RESPONSE {\r\n    if { ! [HTTP::header exists \"X-Content-Type-Options\"] } {\r\n        HTTP::header insert \"X-Content-Type-Options\" \"nosniff\"\r\n    } elseif { [HTTP::header exists \"X-Content-Type-Options\"] } {\r\n        HTTP::header replace \"X-Content-Type-Options\" \"nosniff\"\r\n    }\r\n\r\n    if { ! [HTTP::header exists \"Access-Control-Allow-Origin\"] } {\r\n        HTTP::header insert \"Access-Control-Allow-Origin\" \"https://webappletslab.davivienda.loc\"\r\n    } elseif { [HTTP::header exists \"Access-Control-Allow-Origin\"] } {\r\n        HTTP::header replace \"Access-Control-Allow-Origin\" \"https://webappletslab.davivienda.loc\"\r\n    }\r\n\r\n    if { ! [HTTP::header exists \"X-XSS-Protection\"] } {\r\n        HTTP::header insert \"X-XSS-Protection\" \"1; mode=block\"\r\n        #log local0. \"Cabecera [HTTP::header X-XSS-Protection]\"\r\n    } elseif {  [HTTP::header exists \"X-XSS-Protection\"] } {\r\n        HTTP::header replace \"X-XSS-Protection\" \"1; mode=block\"\r\n        #log local0. \"Cabecera [HTTP::header X-XSS-Protection]\"\r\n    }\r\n\r\n    if { [HTTP::is_redirect] } {\r\n        if { [HTTP::header Location] starts_with \"http:\" && [HTTP::header Location] contains \"90.4.5.86\" } {\r\n            set nuevo [string map -nocase \"http: https:\" [HTTP::header Location]]\r\n            HTTP::header replace Location $nuevo\r\n        }\r\n    }\r\n}"
+                },
+                "Monitor_Webapplets_https": {
+                    "class": "Monitor",
+                    "monitorType": "https",
+                    "send": "GET /WebMonitoreo/monitoreo.jsp HTTP/1.1\\r\\nHost: \\r\\nConnection: Close\\r\\n\\r\\n",
+                    "receive": "Estoy Vivo!!!"
+                },
+                "Monitor_https": {
+                    "class": "Monitor",
+                    "monitorType": "https"
+                },
+                "TCP_Profile": {
+                    "class": "TCP_Profile"
+                },
+                "HTTP_Profile": {
+                    "class": "HTTP_Profile"
+                },
+                "Analytics_Profile": {
+                    "class": "Analytics_Profile",
+                    "captureFilter": {
+                        "requestCapturedParts": "headers",
+                        "responseCapturedParts": "headers"
+                    }
+                }
+            }
+        }
+    }
+}
