@@ -1,0 +1,809 @@
+{
+    "isUICompatible": true,
+    "name": "AS3-Siebel-Compression-https",
+    "published": true,
+    "schemaOverlay": {
+        "type": "object",
+        "properties": {
+            "class": {
+                "type": "string",
+                "const": "Application"
+            },
+            "template": {},
+            "schemaOverlay": {},
+            "label": {},
+            "remark": {}
+        },
+        "additionalProperties": {
+            "allOf": [
+                {
+                    "anyOf": [
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "Service_HTTPS"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "Certificate"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "iRule"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "Pool"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "TLS_Client"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "TLS_Server"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "Analytics_Profile"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "HTTP_Profile"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "TCP_Profile"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "Monitor"
+                                }
+                            }
+                        },
+                        {
+                            "properties": {
+                                "class": {
+                                    "const": "HTTP_Compress"
+                                }
+                            }
+                        }
+                    ]
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "Service_HTTPS"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/Service_HTTPS"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "Certificate"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/Certificate"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "iRule"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/iRule"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "Pool"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/Pool"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "TLS_Client"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/TLS_Client"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "TLS_Server"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/TLS_Server"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "Analytics_Profile"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/Analytics_Profile"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "HTTP_Profile"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/HTTP_Profile"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "TCP_Profile"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/TCP_Profile"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "Monitor"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/Monitor"
+                    }
+                },
+                {
+                    "if": {
+                        "properties": {
+                            "class": {
+                                "const": "HTTP_Compress"
+                            }
+                        }
+                    },
+                    "then": {
+                        "$ref": "#/definitions/HTTP_Compress"
+                    }
+                }
+            ]
+        },
+        "required": [
+            "class"
+        ],
+        "definitions": {
+            "Service_HTTPS": {
+                "properties": {
+                    "class": {},
+                    "profileAnalytics": {
+                        "type": "object",
+                        "properties": {
+                            "use": {
+                                "type": "string",
+                                "default": "Analytics_Profile"
+                            }
+                        }
+                    },
+                    "redirect80": {
+                        "type": "boolean",
+                        "default": false,
+                        "const": false
+                    },
+                    "persistenceMethods": {
+                        "type": "array",
+                        "default": []
+                    },
+                    "virtualPort": {
+                        "type": "number",
+                        "default": 443
+                    },
+                    "serverTLS": {
+                        "type": "string",
+                        "default": "TLS_Server"
+                    },
+                    "clientTLS": {
+                        "type": "string",
+                        "default": "TLS_Client"
+                    },
+                    "virtualAddresses": {
+                        "type": "array"
+                    },
+                    "enable": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "iRules": {
+                        "type": "array"
+                    },
+                    "pool": {
+                        "type": "string",
+                        "default": "Pool"
+                    },
+                    "profileMultiplex": {
+                        "type": "string"
+                    },
+                    "profileHTTP": {
+                        "type": "object",
+                        "properties": {
+                            "use": {
+                                "type": "string",
+                                "default": "HTTP_Profile"
+                            }
+                        }
+                    },
+                    "snat": {
+                        "type": "string",
+                        "default": "auto"
+                    },
+                    "profileTCP": {
+                        "type": "object",
+                        "properties": {
+                            "use": {
+                                "type": "string",
+                                "default": "TCP_Profile"
+                            }
+                        }
+                    },
+                    "profileHTTPCompression": {
+                        "type": "object",
+                        "properties": {
+                            "use": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Certificate": {
+                "properties": {
+                    "class": {},
+                    "certificate": {
+                        "type": "object",
+                        "properties": {
+                            "bigip": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "privateKey": {
+                        "type": "object",
+                        "properties": {
+                            "bigip": {
+                                "type": "string"
+                            }
+                        }
+                    },
+                    "chainCA": {
+                        "type": "object",
+                        "properties": {
+                            "bigip": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "iRule": {
+                "properties": {
+                    "class": {},
+                    "iRule": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Pool": {
+                "properties": {
+                    "class": {},
+                    "loadBalancingMode": {
+                        "type": "string",
+                        "default": "least-connections-member"
+                    },
+                    "minimumMembersActive": {
+                        "type": "number",
+                        "default": 1
+                    },
+                    "members": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "serverAddresses": {
+                                    "type": "array"
+                                },
+                                "shareNodes": {
+                                    "type": "boolean",
+                                    "default": true,
+                                    "const": true
+                                },
+                                "servicePort": {
+                                    "type": "number"
+                                }
+                            }
+                        }
+                    },
+                    "minimumMonitors": {
+                        "type": "number",
+                        "default": 1
+                    },
+                    "monitors": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "use": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "TLS_Client": {
+                "properties": {
+                    "class": {},
+                    "ciphers": {
+                        "type": "string",
+                        "default": "DEFAULT"
+                    },
+                    "clientCertificate": {
+                        "type": "string"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "TLS_Server": {
+                "properties": {
+                    "class": {},
+                    "certificates": {
+                        "type": "array",
+                        "items": {
+                            "type": "object",
+                            "properties": {
+                                "certificate": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    },
+                    "ciphers": {
+                        "type": "string",
+                        "default": "!TLSv1:!ECDHE-RSA-AES256-CBC-SHA:!3DES:!SSLv2:!EXPORT:!DHE+AES-GCM:!DHE+AES:!DHE+3DES:ECDHE+AES-GCM:ECDHE+AES:RSA+AES-GCM:RSA+AES:ECDHE+3DES:RSA+3DES:!MD5:!SSLv3:!RC4:!ECDHE-RSA-AES128-CBC-SHA+TLSv1_1:!ECDHE-RSA-AES128-CBC-SHA+TLSv1_2:@STRENGTH"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Analytics_Profile": {
+                "properties": {
+                    "class": {},
+                    "captureFilter": {
+                        "type": "object",
+                        "properties": {
+                            "requestCapturedParts": {
+                                "type": "string",
+                                "default": "headers"
+                            },
+                            "responseCapturedParts": {
+                                "type": "string",
+                                "default": "headers"
+                            },
+                            "capturedProtocols": {
+                                "type": "string",
+                                "default": "all"
+                            }
+                        }
+                    },
+                    "collectMaxTpsAndThroughput": {
+                        "type": "boolean"
+                    },
+                    "collectPageLoadTime": {
+                        "type": "boolean"
+                    },
+                    "collectClientSideStatistics": {
+                        "type": "boolean"
+                    },
+                    "collectUserSession": {
+                        "type": "boolean"
+                    },
+                    "collectUrl": {
+                        "type": "boolean"
+                    },
+                    "collectGeo": {
+                        "type": "boolean"
+                    },
+                    "collectIp": {
+                        "type": "boolean"
+                    },
+                    "collectResponseCode": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "collectUserAgent": {
+                        "type": "boolean"
+                    },
+                    "collectMethod": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "collectOsAndBrowser": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "collectedStatsInternalLogging": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "capturedTrafficInternalLogging": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "sessionTimeoutMinutes": {
+                        "type": "number",
+                        "default": 5
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "HTTP_Profile": {
+                "properties": {
+                    "class": {},
+                    "requestChunking": {
+                        "type": "string",
+                        "default": "preserve"
+                    },
+                    "responseChunking": {
+                        "type": "string",
+                        "default": "selective"
+                    },
+                    "rewriteRedirects": {
+                        "type": "string",
+                        "default": "none"
+                    },
+                    "xForwardedFor": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "trustXFF": {
+                        "type": "boolean"
+                    },
+                    "hstsInsert": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "hstsPeriod": {
+                        "type": "number",
+                        "default": 7862400
+                    },
+                    "hstsIncludeSubdomains": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "unknownMethodAction": {
+                        "type": "string",
+                        "default": "allow"
+                    },
+                    "pipelineAction": {
+                        "type": "string",
+                        "default": "allow"
+                    },
+                    "maxHeaderCount": {
+                        "type": "number",
+                        "default": 64
+                    },
+                    "maxHeaderSize": {
+                        "type": "number",
+                        "default": 32768
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "TCP_Profile": {
+                "properties": {
+                    "class": {},
+                    "congestionControl": {
+                        "type": "string",
+                        "default": "woodside"
+                    },
+                    "closeWaitTimeout": {
+                        "type": "number",
+                        "default": 5
+                    },
+                    "autoSendBufferSize": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "autoReceiveWindowSize": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "autoProxyBufferSize": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "ackOnPush": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "abc": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "congestionMetricsCache": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "deferredAccept": {
+                        "type": "boolean"
+                    },
+                    "delayedAcks": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "delayWindowControl": {
+                        "type": "boolean"
+                    },
+                    "dsack": {
+                        "type": "boolean"
+                    },
+                    "earlyRetransmit": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "ecn": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "enhancedLossRecovery": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "fastOpen": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "fastOpenCookieExpiration": {
+                        "type": "number",
+                        "default": 21600
+                    },
+                    "finWaitTimeout": {
+                        "type": "number",
+                        "default": 5
+                    },
+                    "finWait2Timeout": {
+                        "type": "number",
+                        "default": 300
+                    },
+                    "idleTimeout": {
+                        "type": "number",
+                        "default": 300
+                    },
+                    "initCwnd": {
+                        "type": "number",
+                        "default": 16
+                    },
+                    "initRwnd": {
+                        "type": "number",
+                        "default": 16
+                    },
+                    "keepAliveInterval": {
+                        "type": "number",
+                        "default": 1800
+                    },
+                    "limitedTransmit": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "proxyBufferHigh": {
+                        "type": "number",
+                        "default": 262144
+                    },
+                    "proxyBufferLow": {
+                        "type": "number",
+                        "default": 196608
+                    },
+                    "selectiveAcks": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "sendBufferSize": {
+                        "type": "number",
+                        "default": 262144
+                    },
+                    "tailLossProbe": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "timeWaitRecycle": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "timeWaitTimeout": {
+                        "type": "number",
+                        "default": 2000
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "Monitor": {
+                "properties": {
+                    "class": {},
+                    "monitorType": {
+                        "type": "string",
+                        "default": "https"
+                    },
+                    "interval": {
+                        "type": "number",
+                        "default": 5
+                    },
+                    "timeout": {
+                        "type": "number",
+                        "default": 16
+                    },
+                    "receive": {
+                        "type": "string",
+                        "default": "HTTP/1."
+                    },
+                    "send": {
+                        "type": "string",
+                        "default": "HEAD / HTTP/1.0\\r\\n\\r\\n"
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            },
+            "HTTP_Compress": {
+                "properties": {
+                    "class": {},
+                    "contentTypeExcludes": {
+                        "type": "array"
+                    },
+                    "allowHTTP10": {
+                        "type": "boolean"
+                    },
+                    "bufferSize": {
+                        "type": "number",
+                        "default": 4096
+                    },
+                    "uriExcludes": {
+                        "type": "array"
+                    },
+                    "uriIncludes": {
+                        "type": "array"
+                    },
+                    "cpuSaver": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "cpuSaverHigh": {
+                        "type": "number",
+                        "default": 90
+                    },
+                    "cpuSaverLow": {
+                        "type": "number",
+                        "default": 75
+                    },
+                    "minimumSize": {
+                        "type": "number",
+                        "default": 1024
+                    },
+                    "preferMethod": {
+                        "type": "string",
+                        "default": "gzip"
+                    },
+                    "gzipLevel": {
+                        "type": "number",
+                        "default": 1
+                    },
+                    "gzipMemory": {
+                        "type": "number",
+                        "default": 8
+                    },
+                    "gzipWindowSize": {
+                        "type": "number",
+                        "default": 16
+                    },
+                    "keepAcceptEncoding": {
+                        "type": "boolean"
+                    },
+                    "selective": {
+                        "type": "boolean"
+                    },
+                    "varyHeader": {
+                        "type": "boolean",
+                        "default": true
+                    },
+                    "contentTypeIncludes": {
+                        "type": "array",
+                        "default": [
+                            "text/",
+                            "application/(xml|x-javascript)"
+                        ]
+                    }
+                },
+                "type": "object",
+                "additionalProperties": false
+            }
+        }
+    },
+    "selfLink": "https://localhost/mgmt/cm/global/appsvcs-templates/e1a3528c-38d0-3340-8c32-f73a5ec25643",
+    "tenant": {
+        "name": "Siebel",
+        "override": false,
+        "editable": true
+    }
+}
